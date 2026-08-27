@@ -13,7 +13,7 @@ Este repositorio contiene el almacenamiento y desarrollo de todas las **práctic
 ---
 
 ## 🛠️ Requisitos y Ejecución
-* **Lenguaje principal:** [Ej. Java / C++ / Python]
-* **Entorno recomendado:** [Ej. Visual Studio Code / IntelliJ / Dev-C++]
+* **Lenguaje principal:** C#
+* **Entorno recomendado:** Visual Studio
 
 > **Nota:** Este repositorio se actualizará constantemente conforme avancemos con las clases del ciclo.
