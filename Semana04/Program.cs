@@ -1,4 +1,4 @@
-﻿namespace Semana04
+﻿namespace semana04
 {
     internal class Program
     {
