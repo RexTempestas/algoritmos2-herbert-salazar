@@ -2,7 +2,7 @@
   <Project Path="laboratorio03/Laboratorio03.csproj" />
   <Project Path="semana02/semana02.csproj" />
   <Project Path="semana03/semana03.csproj" Id="821b9964-eff8-44a1-907e-6bf33478ac20" />
+  <Project Path="semana04 - Ejercicio01/semana04 - Ejercicio01.csproj" />
   <Project Path="semana04 - Ejercicio02/semana04 - Ejercicio02.csproj" Id="0e403c6d-8b17-4968-8895-e86d0de73c14" />
-  <Project Path="semana04 - Ejercicios/semana04 - Ejercicio01.csproj" Id="8703d858-f4ee-433c-8c5d-18b9e0b58d65" />
   <Project Path="Semana04/Semana04.csproj" DisplayName="semana04" Id="c5fea4e6-3df1-4560-8282-54e52c61963f" />
 </Solution>
