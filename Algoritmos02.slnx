@@ -2,5 +2,5 @@
   <Project Path="laboratorio03/Laboratorio03.csproj" />
   <Project Path="semana02/semana02.csproj" />
   <Project Path="semana03/semana03.csproj" Id="821b9964-eff8-44a1-907e-6bf33478ac20" />
-  <Project Path="Semana04/Semana04.csproj" Id="c5fea4e6-3df1-4560-8282-54e52c61963f" />
+  <Project Path="Semana04/Semana04.csproj" Id="c5fea4e6-3df1-4560-8282-54e52c61963f" DisplayName="semana04" />
 </Solution>
