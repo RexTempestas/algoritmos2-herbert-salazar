@@ -17,5 +17,3 @@ Este repositorio contiene el almacenamiento y desarrollo de todas las **práctic
 * **Entorno recomendado:** Visual Studio
 
 > **Nota:** Este repositorio se actualizará constantemente conforme avancemos con las clases del ciclo.
-
-QR: https://tecnologica.utec.edu.sv/sistema/login.php?qr=dbc6b8396ccba673408f2fc5efb0b31695772511559eb6d41f8d9332e314cfb2
