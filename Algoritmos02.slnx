@@ -4,5 +4,7 @@
   <Project Path="semana03/semana03.csproj" Id="821b9964-eff8-44a1-907e-6bf33478ac20" />
   <Project Path="semana04 - Ejercicio01/semana04 - Ejercicio01.csproj" />
   <Project Path="semana04 - Ejercicio02/semana04 - Ejercicio02.csproj" Id="0e403c6d-8b17-4968-8895-e86d0de73c14" />
-  <Project Path="Semana04/Semana04.csproj" DisplayName="semana04" Id="c5fea4e6-3df1-4560-8282-54e52c61963f" />
+  <Project Path="Semana04/Semana04.csproj" Id="c5fea4e6-3df1-4560-8282-54e52c61963f" />
+  <Project Path="semana06/semana06.csproj" Id="92db4756-debd-4fdd-b8cd-624c588c7fac" />
+  <Project Path="semana07 -  arreglos/semana07 -  arreglos.csproj" Id="a2221c53-3db4-43cb-a0a6-6662d8691c94" />
 </Solution>
