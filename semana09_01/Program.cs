@@ -7,6 +7,11 @@ namespace semana09_01
         public static List<string> alumnos = [];
         public static List<decimal> notas = [];
         public static decimal promedio = 0.0m;
+        public static List<decimal> notasPrevias = []; //   Variable que almacena valores previos de notas para poder mostrar el cambio de nota en la consola.
+
+        public static String continuar = "";
+
+        public static int largoDiv = 50; // Variable que almacena el largo de la linea divisoria en la consola.
 
         static void Main(string[] args)
         {
@@ -20,19 +25,23 @@ namespace semana09_01
             String opcion = "";
             do
             {
-                Console.WriteLine(new string('-', 30));
+                Console.WriteLine(new string('-', largoDiv));
                 Console.WriteLine("Sistema de ingreso de notas");
-                Console.WriteLine(new string('-', 30));
+                Console.WriteLine(new string('-', largoDiv));
                 Console.WriteLine("\nSeleccione una opción:" +
                     "\n1. Ingresar alumnos" +
                     "\n2. Ingresar notas" +
                     "\n3. Mostrar notas" +
                     "\n4. Eliminar registro de alumno" +
                     "\n5. Salir del sistema");
-                
-                opcion = Console.ReadLine();
 
-                if (opcion == null || opcion == "")
+                Console.Write("\nOpción: ");
+                
+                opcion = Console.ReadLine() ?? string.Empty;
+
+                Console.WriteLine(new string('-', largoDiv));
+
+                if (string.IsNullOrWhiteSpace(opcion))
                 {
                     Console.WriteLine("\n> Opción inválida, por favor seleccione una opción válida");
                     continue;
@@ -41,9 +50,10 @@ namespace semana09_01
                 else if (opcion.Equals("2")) { IngresarNotas(); }
                 else if (opcion.Equals("3")) { ImprimirNotas(); }
                 else if (opcion.Equals("4")) { EliminarRegistroAlumno(); }
+                else if (opcion.Equals("5")) { Console.WriteLine("\n> Usted selecciono salir del sistema"); break; }
                 else { 
-                    Console.WriteLine("\n> Usted selecciono salir del sistema");
-                    break;}
+                    Console.WriteLine("\n> Opcion invalida, porfavor seleccione una opcion valida");
+                    continue;}
             }
             while (true);
         }
@@ -51,28 +61,37 @@ namespace semana09_01
         public static void IngresarNombresAlumnos()
         {
             String nombreIngresado = "";
-            String continuar = "";
+
             do
             {
                 do
                 {
                     Console.WriteLine("\nIngrese el nombre del alumno:");
+                    Console.Write("\nNombre: ");
                         
-                    nombreIngresado = Console.ReadLine();
+                    nombreIngresado = Console.ReadLine() ?? string.Empty;
 
-                    if (nombreIngresado == null || nombreIngresado.Trim() == "")
+                    if (string.IsNullOrWhiteSpace(nombreIngresado) || !nombreIngresado.All(c => char.IsLetter(c) || char.IsWhiteSpace(c)))
                     {
                         Console.WriteLine("No se ingresó ningún nombre.");
                         continue;
                     }
+
+                    //  Se agrega a lista por medio de metodo Add() el nombre ingresado, y se agrega un valor 0.0m a la lista de notas y notasPrevias para mantener la consistencia de los índices.
+                    //  Si no se hace esto, al ingresar una nota para un alumno, se podría intentar acceder a un índice que no existe en la lista de notas, lo que generaría un error.
                     alumnos.Add(nombreIngresado);
+                    notas.Add(0.0m);
+                    notasPrevias.Add(0.0m);
                     Console.WriteLine($"\nEl nombre ha sido ingresado en la posicion {alumnos.Count}");
                     break;
                 }
                 while (true);
+
                 Console.WriteLine("\n¿Desea ingresar otro registro de alumnos? Si/No");
-                continuar = Console.ReadLine();
-                if (continuar == null || continuar.ToLower() != "si")
+                Console.Write("\n\nR: ");
+
+                continuar = Console.ReadLine() ?? string.Empty;
+                if (string.IsNullOrWhiteSpace(continuar) || continuar.ToLower() != "si")
                 {
                     Console.WriteLine("\n> Usted selecciono no agregar otro registro de alumnos");
                     break;
@@ -80,6 +99,7 @@ namespace semana09_01
                 else
                 {
                     Console.WriteLine("\n> Usted selecciono agregar otro registro de alumnos");
+                    Console.WriteLine(new string('-', largoDiv));
                 }
             }
             while (true);
@@ -90,102 +110,150 @@ namespace semana09_01
             String nombreAlumno = "";
             int indexAlumno = 0;
 
-
-
-            if (alumnos.Count == 0)
-            {
-                Console.WriteLine("\nNo es posible eliminar alumnos, no hay alumnos registrados");
-            }
-            else {
-                Console.WriteLine("\nSeleccione el alumno a eliminar" +
-                  "Ingrese '0' para consultar listado alumnos");
-
-                nombreAlumno = Console.ReadLine();
-
-                if (!alumnos.Contains(nombreAlumno) || nombreAlumno == null)
+            do {
+                // Se verifica si hay alumnos registrados antes de intentar eliminar uno.
+                if (alumnos.Count == 0)
                 {
-                    Console.WriteLine("Alumno no encontrado, por favor ingrese un nombre válido");
-                }
-                else if (nombreAlumno == "0")
-                {
-                    Console.WriteLine("\n> A continuación se mostrara la lista de alumnos registrados");
-                    ImprimirAlumnos();
+                    Console.WriteLine("\nNo es posible eliminar alumnos, no hay alumnos registrados");
+                    break;
                 }
                 else
                 {
-                    indexAlumno = alumnos.IndexOf(nombreAlumno);
-                    alumnos.RemoveAt(indexAlumno);
-                    notas.RemoveAt(indexAlumno);
-                    Console.WriteLine($"\nEl alumno {nombreAlumno} ha sido eliminado del registro");
+                    Console.WriteLine("\nSeleccione el alumno a eliminar" +
+                      "- Ingrese '0' para consultar listado alumnos -");
+                    Console.Write("\nAlumno: ");
+
+                    nombreAlumno = Console.ReadLine() ?? string.Empty;
+
+                    if (string.IsNullOrWhiteSpace(nombreAlumno) || !nombreAlumno.All(c => char.IsLetter(c) || char.IsWhiteSpace(c)))
+                    {
+                        Console.WriteLine("\n> A continuación se mostrara la lista de alumnos registrados");
+                        ImprimirAlumnos();
+                        continue;
+                    }
+                    else if (!alumnos.Contains(nombreAlumno) || nombreAlumno == null)
+                    {
+                        Console.WriteLine("Alumno no encontrado, por favor ingrese un nombre válido");
+                        continue;
+                    }
+                    else
+                    {
+                        // Se obtiene el índice del alumno a eliminar en la lista alumnos.
+                        indexAlumno = alumnos.IndexOf(nombreAlumno);
+
+                        // Se eliminan los elementos de las listas alumnos, notas y notasPrevias en la misma posición para mantener la consistencia de los índices.
+                        alumnos.RemoveAt(indexAlumno);
+                        notas.RemoveAt(indexAlumno);
+                        notasPrevias.RemoveAt(indexAlumno);
+                        Console.WriteLine($"\nEl alumno {nombreAlumno} ha sido eliminado del registro");
+                        break;
+                    }
                 }
-            }
+            } while (true);
+
         }
 
         public static void IngresarNotas()
         {
             String notaIngresada = "";
             String nombreAlumno = "";
-            decimal notaPrevia = 0.0m;
             int indexAlumno = 0;
 
-            
+            do {
 
-            if (alumnos.Count == 0) {
-                Console.WriteLine("\nNo es posible ingresar notas, no hay alumnos registrados");
-            }
-            else {
-
-                Console.WriteLine("\nSeleccione el alumno a ingresarle nota" +
-                "Ingrese '0' para consultar listado alumnos");
-
-                nombreAlumno = Console.ReadLine();
-
-                if (!alumnos.Contains(nombreAlumno) || nombreAlumno == null) {
-                    Console.WriteLine("Alumno no encontrado, por favor ingrese un nombre válido");
-                } else if (nombreAlumno == "0")
+                // Se verifica si hay alumnos registrados antes de intentar ingresar una nota.
+                if (alumnos.Count == 0)
                 {
-                    Console.WriteLine("\n> A continuación se mostrara la lista de alumnos registrados");
-                    ImprimirAlumnos();
+                    Console.WriteLine("\nNo es posible ingresar notas, no hay alumnos registrados");
+                    break;
                 }
                 else
                 {
-                    indexAlumno = alumnos.IndexOf(nombreAlumno);
 
-                    do
+                    Console.WriteLine("\nSeleccione el alumno a ingresarle nota\n" +
+                    "Ingrese '0' para consultar listado alumnos");
+                    Console.Write("\nNombre: ");
+
+                    nombreAlumno = Console.ReadLine() ?? string.Empty;
+
+                    if (string.IsNullOrWhiteSpace(nombreAlumno) || nombreAlumno.Equals("0") || !nombreAlumno.All(c => char.IsLetter(c) || char.IsWhiteSpace(c)))
                     {
-                        Console.WriteLine("\nIngrese una nota entre 0 y 10:");
+                        Console.WriteLine("\n> A continuación se mostrara la lista de alumnos registrados");
+                        ImprimirAlumnos();
+                        continue;
 
-                        notaIngresada = Console.ReadLine();
-
-                        if (notaIngresada == null)
-                        {
-                            Console.WriteLine("No se ingresó ninguna nota.");
-                            continue;
-                        }
-
-                        if (!decimal.TryParse(notaIngresada, out decimal numero))
-                        {
-                            Console.WriteLine("La nota ingresada no es un número válido.");
-                            continue;
-                        }
-
-                        decimal notaFiltrada = decimal.Parse(notaIngresada);
-
-                        if (notaFiltrada < 0 || notaFiltrada > 10)
-                        {
-                            Console.WriteLine("\nLa nota ingresada sale del rango valido (0 - 10)");
-                            continue;
-                        }
-
-                        notas[indexAlumno] = notaFiltrada;
-                        Console.WriteLine($"\nLa nota ha sido ingresada para el alumno {alumnos[indexAlumno]}");
-                        Console.WriteLine($"\nLa nota previa era {notaPrevia} la nota nueva es {notaFiltrada}");
-                        break;
                     }
-                    while (true);
+                    else if (!alumnos.Contains(nombreAlumno) || nombreAlumno == null)
+                    {
+                        Console.WriteLine("Alumno no encontrado, por favor ingrese un nombre válido");
+                        continue;
+                    }
+                    else
+                    {
+                        indexAlumno = alumnos.IndexOf(nombreAlumno);
+                        Console.WriteLine(indexAlumno);
+
+                        do
+                        {
+                            Console.WriteLine("\nIngrese una nota entre 0 y 10:");
+                            Console.Write("\nNota: ");
+
+                            notaIngresada = Console.ReadLine() ?? string.Empty;
+
+                            if (string.IsNullOrWhiteSpace(notaIngresada))
+                            {
+                                Console.WriteLine("No se ingresó ninguna nota.");
+                                continue;
+                            }
+
+                            if (!decimal.TryParse(notaIngresada, out decimal numero))
+                            {
+                                Console.WriteLine("La nota ingresada no es un número válido.");
+                                continue;
+                            }
+
+                            decimal notaFiltrada = decimal.Parse(notaIngresada);
+
+                            if (notaFiltrada < 0 || notaFiltrada > 10)
+                            {
+                                Console.WriteLine("\nLa nota ingresada sale del rango valido (0 - 10)");
+                                continue;
+                            }
+
+                            // Se actualiza la nota del alumno en la lista de notas en la posición correspondiente al índice del alumno.
+                            notas[indexAlumno] = notaFiltrada;
+
+                            Console.WriteLine($"\nLa nota ha sido ingresada para el alumno {alumnos[indexAlumno]}");
+                            Console.WriteLine($"\nLa nota previa era {notasPrevias[indexAlumno]} la nota nueva es {notaFiltrada}");
+
+                            // Se actualiza la nota previa con la nueva nota ingresada para poder mostrar el cambio en la consola.
+                            notasPrevias[indexAlumno] = notaFiltrada;
+
+                            break;
+                        }
+                        while (true);
+                    }
+
                 }
 
-            }
+                Console.WriteLine("\n¿Desea ingresar otro registro de notas? Si/No");
+                Console.Write("\nR: ");
+
+                continuar = Console.ReadLine() ?? string.Empty;
+
+                if (string.IsNullOrWhiteSpace(continuar) || continuar.ToLower() != "si")
+                {
+                    Console.WriteLine("\n\n> Usted selecciono no agregar otro registro de notas");
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine("\n> Usted selecciono agregar otro registro de notas");
+                    Console.WriteLine(new string('-', largoDiv));
+                }
+
+            } while (true);
+
         }
 
         public static void ImprimirAlumnos()
@@ -201,32 +269,50 @@ namespace semana09_01
         {
             if (alumnos.Count == 0)
             {
-                Console.WriteLine("\nNo es posible imprimir las notas, no hay alumnos registrados.");
-            }
-            else {
-                promedio = notas.Average();
-                Console.WriteLine($"\nAl momento hay {notas.Count} notas registradas para {alumnos.Count} alumnos" +
-                    $"\n¿Desea imprimir el registro de notas? Si/No");
-                String imprimir = Console.ReadLine();
-
-                if (imprimir == null || imprimir.ToLower() != "si")
-                {
-                    Console.WriteLine("\n> Usted selecciono no imprimir el registro de notas");
-                    return;
-                }
-                else
-                {
-                    Console.WriteLine("\n> Usted selecciono imprimir el registro de notas");
-                    Console.WriteLine("\nRegistro de notas ingresadas:");
-                    for (int i = 0; i < notas.Count; i++)
-                    {
-                        Console.WriteLine($"Nota de {alumnos[i]}: {notas[i]}");
-                    }
-
-                    Console.WriteLine($"\nPromedio de notas: {promedio}");
-                }
+                Console.WriteLine("\n[!] No es posible imprimir las notas, no hay alumnos registrados.");
+                return;
             }
 
+            if (notas.Count == 0)
+            {
+                Console.WriteLine("\n[!] No hay notas ingresadas aún.");
+                return;
+            }
+
+            Console.WriteLine($"\n> Al momento hay {notas.Count} notas registradas para {alumnos.Count} alumnos.");
+            Console.Write("¿Desea imprimir el registro de notas? (Si/No): ");
+            Console.Write("\nR: ");
+
+            string imprimir = Console.ReadLine() ?? string.Empty;
+
+            if (string.IsNullOrEmpty(imprimir) || !imprimir.Trim().Equals("si", StringComparison.OrdinalIgnoreCase))
+            {
+                Console.WriteLine("\n> Operación cancelada. No se imprimirá el registro.");
+                return;
+            }
+
+            decimal promedio = notas.Average();
+
+            // Se dibuja una tabla limpia en la consola
+            Console.WriteLine("\n"+ new string('=', largoDiv));
+            Console.WriteLine("               REGISTRO DE NOTAS                  ");
+            Console.WriteLine(new string('-', largoDiv));
+
+            // Encabezados con ancho fijo: N° (4 char), Alumno (25 char), Nota (10 char)
+            Console.WriteLine($"{"N°",-4} | {"Nombre del Alumno",-25} | {"Nota",-10}");
+            Console.WriteLine(new string('-', largoDiv));
+
+            for (int i = 0; i < notas.Count; i++)
+            {
+                // {i + 1,-4}  -> Alineado a la izquierda, ocupa 4 espacios
+                // {alumnos[i],-25} -> Alineado a la izquierda, ocupa 25 espacios
+                // {notas[i],8:F2}  -> Alineado a la derecha, 2 decimales, ocupa 8 espacios
+                Console.WriteLine($"{i + 1,-4} | {alumnos[i],-25} | {notas[i],8:F2}");
+            }
+
+            Console.WriteLine(new string('-', largoDiv));
+            Console.WriteLine($"{"PROMEDIO GENERAL:",-32} | {promedio,8:F2}");
+            Console.WriteLine(new string('=', largoDiv) + "\n");
         }
     }
 }
